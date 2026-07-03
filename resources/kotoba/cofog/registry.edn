@@ -1,0 +1,119 @@
+{:kotoba.registry/id :kotoba/cofog
+ :kotoba.registry/version 1
+ :kotoba.registry/updated "2026-07-03"
+ :kotoba.registry/note "COFOG (UN Classification of the Functions of Government) authoritative 10-division/69-group coverage (79/79), mirrors kotoba-lang/occupation's ISCO-08 full registry and kotoba-lang/industry's ISIC full registry. Division/group English+Japanese labels reused verbatim from matsurigoto's authoritative COFOG backbone (etzhayyim/root, 20-actors/matsurigoto/data/cofog-standard.kotoba.edn — sourced from UN Statistics Division / OECD-Eurostat COFOG / IMF GFSM 2014), not re-derived. Divisions are parent/queryable nodes only (not independently blueprint-eligible, mirroring ISCO's major-group treatment); GROUPS are the blueprint-eligible level. Most entries are :maturity :spec (registry-only stub); curated entries have a published cloud-itonami-cofog-{code} blueprint repo."
+ :cofog
+ [{:code "01" :level :division :name "General public services" :name-ja "一般公共サービス" :maturity :spec}
+  {:code "01.1" :level :group :parent "01" :name "Executive/legislative organs, financial, fiscal, external affairs" :name-ja "行政・立法機関、財政・財務・外交" :maturity :spec :required-technologies [:robotics :identity :forms :bpmn :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "01.2" :level :group :parent "01" :name "Foreign economic aid" :name-ja "対外経済援助" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "01.3" :level :group :parent "01" :name "General services" :name-ja "一般サービス（人事・統計・記録）" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "01.4" :level :group :parent "01" :name "Basic research" :name-ja "基礎研究" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "01.5" :level :group :parent "01" :name "R&D General public services" :name-ja "研究開発（一般公共）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "01.6" :level :group :parent "01" :name "General public services n.e.c." :name-ja "他に分類されない一般公共サービス" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "01.7" :level :group :parent "01" :name "Public debt transactions" :name-ja "公債取引" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "01.8" :level :group :parent "01" :name "Transfers between levels of government" :name-ja "政府間移転" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "02" :level :division :name "Defence" :name-ja "防衛" :maturity :spec}
+  {:code "02.1" :level :group :parent "02" :name "Military defence" :name-ja "軍事防衛" :maturity :spec :required-technologies [:robotics :identity :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "02.2" :level :group :parent "02" :name "Civil defence" :name-ja "民間防衛" :maturity :spec :required-technologies [:robotics :identity :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "02.3" :level :group :parent "02" :name "Foreign military aid" :name-ja "対外軍事援助" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "02.4" :level :group :parent "02" :name "R&D Defence" :name-ja "研究開発（防衛）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "02.5" :level :group :parent "02" :name "Defence n.e.c." :name-ja "他に分類されない防衛" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "03" :level :division :name "Public order and safety" :name-ja "公共の秩序・安全" :maturity :spec}
+  {:code "03.1" :level :group :parent "03" :name "Police services" :name-ja "警察" :maturity :spec :required-technologies [:robotics :identity :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "03.2" :level :group :parent "03"
+   :name "Fire-protection services" :name-ja "消防"
+   :repo "https://github.com/cloud-itonami/cloud-itonami-cofog-03.2"
+   :business-id "cloud-itonami-cofog-03.2"
+   :maturity :blueprint
+   :required-technologies [:robotics :telemetry :forms :dmn :bpmn :audit-ledger]
+   :optional-technologies []
+   :operating-states [:inspect :risk-score :recommend :dispatch-crew :report :audit]}
+  {:code "03.3" :level :group :parent "03" :name "Law courts" :name-ja "裁判所" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "03.4" :level :group :parent "03" :name "Prisons" :name-ja "矯正施設" :maturity :spec :required-technologies [:robotics :identity :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "03.5" :level :group :parent "03" :name "R&D Public order and safety" :name-ja "研究開発（秩序・安全）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "03.6" :level :group :parent "03" :name "Public order and safety n.e.c." :name-ja "他に分類されない秩序・安全" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04" :level :division :name "Economic affairs" :name-ja "経済業務" :maturity :spec}
+  {:code "04.1" :level :group :parent "04" :name "General economic, commercial and labour affairs" :name-ja "一般経済・商業・労働" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04.2" :level :group :parent "04" :name "Agriculture, forestry, fishing, hunting" :name-ja "農林水産" :maturity :spec :required-technologies [:robotics :telemetry :optimization :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04.3" :level :group :parent "04" :name "Fuel and energy" :name-ja "燃料・エネルギー" :maturity :spec :required-technologies [:robotics :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04.4" :level :group :parent "04" :name "Mining, manufacturing, construction" :name-ja "鉱業・製造・建設" :maturity :spec :required-technologies [:robotics :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04.5" :level :group :parent "04"
+   :name "Transport" :name-ja "運輸"
+   :repo "https://github.com/cloud-itonami/cloud-itonami-cofog-04.5"
+   :business-id "cloud-itonami-cofog-04.5"
+   :maturity :blueprint
+   :required-technologies [:robotics :telemetry :forms :dmn :bpmn :audit-ledger]
+   :optional-technologies []
+   :operating-states [:inspect :assess-defect :recommend-repair :approve :report :audit]}
+  {:code "04.6" :level :group :parent "04" :name "Communication" :name-ja "通信" :maturity :spec :required-technologies [:robotics :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04.7" :level :group :parent "04" :name "Other industries" :name-ja "その他産業" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04.8" :level :group :parent "04" :name "R&D Economic affairs" :name-ja "研究開発（経済）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "04.9" :level :group :parent "04" :name "Economic affairs n.e.c." :name-ja "他に分類されない経済業務" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "05" :level :division :name "Environmental protection" :name-ja "環境保護" :maturity :spec}
+  {:code "05.1" :level :group :parent "05"
+   :name "Waste management" :name-ja "廃棄物管理"
+   :repo "https://github.com/cloud-itonami/cloud-itonami-cofog-05.1"
+   :business-id "cloud-itonami-cofog-05.1"
+   :maturity :blueprint
+   :required-technologies [:robotics :telemetry :optimization :bpmn :audit-ledger]
+   :optional-technologies []
+   :operating-states [:collect :sort :route :transfer :report :audit]}
+  {:code "05.2" :level :group :parent "05" :name "Waste water management" :name-ja "排水管理" :maturity :spec :required-technologies [:robotics :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "05.3" :level :group :parent "05" :name "Pollution abatement" :name-ja "汚染防止" :maturity :spec :required-technologies [:robotics :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "05.4" :level :group :parent "05" :name "Protection of biodiversity and landscape" :name-ja "生物多様性・景観保護" :maturity :spec :required-technologies [:robotics :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "05.5" :level :group :parent "05" :name "R&D Environmental protection" :name-ja "研究開発（環境）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "05.6" :level :group :parent "05" :name "Environmental protection n.e.c." :name-ja "他に分類されない環境保護" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "06" :level :division :name "Housing and community amenities" :name-ja "住宅・地域施設" :maturity :spec}
+  {:code "06.1" :level :group :parent "06" :name "Housing development" :name-ja "住宅開発" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "06.2" :level :group :parent "06" :name "Community development" :name-ja "地域開発" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "06.3" :level :group :parent "06"
+   :name "Water supply" :name-ja "上水道"
+   :repo "https://github.com/cloud-itonami/cloud-itonami-cofog-06.3"
+   :business-id "cloud-itonami-cofog-06.3"
+   :maturity :blueprint
+   :required-technologies [:robotics :telemetry :dmn :bpmn :audit-ledger]
+   :optional-technologies []
+   :operating-states [:sense :detect-leak :recommend-repair :approve :report :audit]}
+  {:code "06.4" :level :group :parent "06" :name "Street lighting" :name-ja "街路照明" :maturity :spec :required-technologies [:robotics :telemetry :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "06.5" :level :group :parent "06" :name "R&D Housing and community amenities" :name-ja "研究開発（住宅・地域）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "06.6" :level :group :parent "06" :name "Housing and community amenities n.e.c." :name-ja "他に分類されない住宅・地域施設" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "07" :level :division :name "Health" :name-ja "保健" :maturity :spec}
+  {:code "07.1" :level :group :parent "07" :name "Medical products, appliances, equipment" :name-ja "医薬品・医療機器" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "07.2" :level :group :parent "07" :name "Outpatient services" :name-ja "外来サービス" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "07.3" :level :group :parent "07" :name "Hospital services" :name-ja "入院サービス" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "07.4" :level :group :parent "07"
+   :name "Public health services" :name-ja "公衆衛生"
+   :repo "https://github.com/cloud-itonami/cloud-itonami-cofog-07.4"
+   :business-id "cloud-itonami-cofog-07.4"
+   :maturity :blueprint
+   :required-technologies [:robotics :telemetry :identity :dmn :bpmn :audit-ledger]
+   :optional-technologies []
+   :operating-states [:sense :detect-vector :recommend :approve :report :audit]}
+  {:code "07.5" :level :group :parent "07" :name "R&D Health" :name-ja "研究開発（保健）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "07.6" :level :group :parent "07" :name "Health n.e.c." :name-ja "他に分類されない保健" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "08" :level :division :name "Recreation, culture and religion" :name-ja "娯楽・文化・宗教" :maturity :spec}
+  {:code "08.1" :level :group :parent "08" :name "Recreational and sporting services" :name-ja "娯楽・スポーツ" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "08.2" :level :group :parent "08" :name "Cultural services" :name-ja "文化サービス" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "08.3" :level :group :parent "08" :name "Broadcasting and publishing services" :name-ja "放送・出版" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "08.4" :level :group :parent "08" :name "Religious and other community services" :name-ja "宗教・地域サービス" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "08.5" :level :group :parent "08" :name "R&D Recreation, culture and religion" :name-ja "研究開発（娯楽・文化）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "08.6" :level :group :parent "08" :name "Recreation, culture and religion n.e.c." :name-ja "他に分類されない娯楽・文化・宗教" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09" :level :division :name "Education" :name-ja "教育" :maturity :spec}
+  {:code "09.1" :level :group :parent "09" :name "Pre-primary and primary education" :name-ja "就学前・初等教育" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09.2" :level :group :parent "09" :name "Secondary education" :name-ja "中等教育" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09.3" :level :group :parent "09" :name "Post-secondary non-tertiary education" :name-ja "中等後・非高等教育" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09.4" :level :group :parent "09" :name "Tertiary education" :name-ja "高等教育" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09.5" :level :group :parent "09" :name "Education not definable by level" :name-ja "水準別に定義できない教育" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09.6" :level :group :parent "09" :name "Subsidiary services to education" :name-ja "教育付帯サービス" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09.7" :level :group :parent "09" :name "R&D Education" :name-ja "研究開発（教育）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "09.8" :level :group :parent "09" :name "Education n.e.c." :name-ja "他に分類されない教育" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10" :level :division :name "Social protection" :name-ja "社会保護" :maturity :spec}
+  {:code "10.1" :level :group :parent "10" :name "Sickness and disability" :name-ja "疾病・障害" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.2" :level :group :parent "10" :name "Old age" :name-ja "高齢" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.3" :level :group :parent "10" :name "Survivors" :name-ja "遺族" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.4" :level :group :parent "10" :name "Family and children" :name-ja "家族・児童" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.5" :level :group :parent "10" :name "Unemployment" :name-ja "失業" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.6" :level :group :parent "10" :name "Housing" :name-ja "住宅扶助" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.7" :level :group :parent "10" :name "Social exclusion n.e.c." :name-ja "他に分類されない社会的排除" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.8" :level :group :parent "10" :name "R&D Social protection" :name-ja "研究開発（社会保護）" :maturity :spec :required-technologies [:robotics :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}
+  {:code "10.9" :level :group :parent "10" :name "Social protection n.e.c." :name-ja "他に分類されない社会保護" :maturity :spec :required-technologies [:robotics :identity :forms :audit-ledger] :optional-technologies [] :operating-states [:intake :propose :approve :execute :audit]}]}

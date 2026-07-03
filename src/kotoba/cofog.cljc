@@ -1,0 +1,114 @@
+(ns kotoba.cofog
+  (:require [clojure.edn :as edn]
+            [clojure.java.io :as io]
+            [clojure.set :as set]
+            [kotoba.technology :as technology]))
+
+(def registry-resource "kotoba/cofog/registry.edn")
+
+(defn registry []
+  (edn/read-string (slurp (io/resource registry-resource))))
+
+(defn functions
+  ([] (:cofog (registry)))
+  ([reg] (:cofog reg)))
+
+(defn by-code
+  ([] (by-code (registry)))
+  ([reg] (into {} (map (juxt :code identity) (functions reg)))))
+
+(defn get-cofog
+  ([code] (get-cofog (registry) code))
+  ([reg code] (get (by-code reg) (str code))))
+
+(defn required-technologies
+  ([code] (required-technologies (registry) code))
+  ([reg code] (:required-technologies (get-cofog reg code))))
+
+(defn optional-technologies
+  ([code] (optional-technologies (registry) code))
+  ([reg code] (:optional-technologies (get-cofog reg code))))
+
+(defn technology-stack
+  "Resolve the required technology records for a COFOG group."
+  ([code] (technology-stack (registry) code))
+  ([reg code]
+   (technology/stack (required-technologies reg code))))
+
+(defn readiness
+  "Return an execution-readiness summary for a COFOG code and available technology IDs."
+  [code available-tech-ids]
+  (let [fn* (get-cofog code)
+        required (set (:required-technologies fn*))
+        available (set available-tech-ids)
+        missing (set/difference required available)]
+    {:cofog (str code)
+     :business-id (:business-id fn*)
+     :ready? (empty? missing)
+     :required required
+     :available available
+     :missing missing
+     :operating-states (:operating-states fn*)}))
+
+(defn execution-plan
+  "Data contract cloud-itonami-cofog can expose in business state."
+  [code]
+  (let [fn* (get-cofog code)
+        stack (technology-stack code)]
+    {:cofog (str code)
+     :business-id (:business-id fn*)
+     :function (:name fn*)
+     :maturity (:maturity fn*)
+     :required-technologies (:required-technologies fn*)
+     :optional-technologies (:optional-technologies fn*)
+     :operating-states (:operating-states fn*)
+     :ui-ready? (some :ui? stack)
+     :export-ready? (some :export? stack)
+     :technology-stack (mapv #(select-keys % [:id :name :layer :capabilities :repos :contracts :ui? :export?])
+                             stack)}))
+
+(defn maturity
+  "Return the maturity level of a COFOG entry: :spec (registry only),
+  :blueprint (blueprint repo published), or :implemented (source actor exists).
+  Defaults to :spec when unset."
+  [code]
+  (let [fn* (get-cofog code)]
+    (or (:maturity fn*)
+        (cond
+          (:implemented? fn*) :implemented
+          (:repo fn*)         :blueprint
+          :else               :spec))))
+
+(defn maturity-summary
+  "Aggregate maturity counts across all COFOG entries (divisions + groups)."
+  []
+  (let [fns (functions)]
+    {:total       (count fns)
+     :spec        (count (filter #(= :spec (maturity (:code %))) fns))
+     :blueprint   (count (filter #(= :blueprint (maturity (:code %))) fns))
+     :implemented (count (filter #(= :implemented (maturity (:code %))) fns))}))
+
+(defn maturity-roadmap
+  "Return the next maturity step for a COFOG entry: :spec->:blueprint->:implemented,
+  with the action required to advance and whether a capability lib with UI/export
+  already backs it."
+  [code]
+  (let [fn* (get-cofog code)
+        level (maturity code)
+        stack (technology-stack code)
+        ui? (some :ui? stack)
+        export? (some :export? stack)
+        has-repo (boolean (:repo fn*))]
+    {:cofog (str code)
+     :maturity level
+     :next-step (condp = level
+                  :spec        :blueprint
+                  :blueprint   :implemented
+                  :implemented nil)
+     :next-action (condp = level
+                    :spec        "publish a blueprint repo (scaffold + blueprint.edn + docs)"
+                    :blueprint   "implement the actor (source + tests)"
+                    :implemented "at maturity ceiling")
+     :ui-ready? ui?
+     :export-ready? export?
+     :has-repo has-repo}))
