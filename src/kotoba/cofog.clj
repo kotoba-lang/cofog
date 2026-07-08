@@ -38,30 +38,30 @@
 (defn readiness
   "Return an execution-readiness summary for a COFOG code and available technology IDs."
   [code available-tech-ids]
-  (let [fn* (get-cofog code)
-        required (set (:required-technologies fn*))
+  (let [cofog-fn (get-cofog code)
+        required (set (:required-technologies cofog-fn))
         available (set available-tech-ids)
         missing (set/difference required available)]
     {:cofog (str code)
-     :business-id (:business-id fn*)
+     :business-id (:business-id cofog-fn)
      :ready? (empty? missing)
      :required required
      :available available
      :missing missing
-     :operating-states (:operating-states fn*)}))
+     :operating-states (:operating-states cofog-fn)}))
 
 (defn execution-plan
   "Data contract cloud-itonami-cofog can expose in business state."
   [code]
-  (let [fn* (get-cofog code)
+  (let [cofog-fn (get-cofog code)
         stack (technology-stack code)]
     {:cofog (str code)
-     :business-id (:business-id fn*)
-     :function (:name fn*)
-     :maturity (:maturity fn*)
-     :required-technologies (:required-technologies fn*)
-     :optional-technologies (:optional-technologies fn*)
-     :operating-states (:operating-states fn*)
+     :business-id (:business-id cofog-fn)
+     :function (:name cofog-fn)
+     :maturity (:maturity cofog-fn)
+     :required-technologies (:required-technologies cofog-fn)
+     :optional-technologies (:optional-technologies cofog-fn)
+     :operating-states (:operating-states cofog-fn)
      :ui-ready? (some :ui? stack)
      :export-ready? (some :export? stack)
      :technology-stack (mapv #(select-keys % [:id :name :layer :capabilities :repos :contracts :ui? :export?])
@@ -72,11 +72,11 @@
   :blueprint (blueprint repo published), or :implemented (source actor exists).
   Defaults to :spec when unset."
   [code]
-  (let [fn* (get-cofog code)]
-    (or (:maturity fn*)
+  (let [cofog-fn (get-cofog code)]
+    (or (:maturity cofog-fn)
         (cond
-          (:implemented? fn*) :implemented
-          (:repo fn*)         :blueprint
+          (:implemented? cofog-fn) :implemented
+          (:repo cofog-fn)         :blueprint
           :else               :spec))))
 
 (defn maturity-summary
@@ -93,12 +93,12 @@
   with the action required to advance and whether a capability lib with UI/export
   already backs it."
   [code]
-  (let [fn* (get-cofog code)
+  (let [cofog-fn (get-cofog code)
         level (maturity code)
         stack (technology-stack code)
         ui? (some :ui? stack)
         export? (some :export? stack)
-        has-repo (boolean (:repo fn*))]
+        has-repo (boolean (:repo cofog-fn))]
     {:cofog (str code)
      :maturity level
      :next-step (condp = level
