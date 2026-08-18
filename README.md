@@ -19,6 +19,30 @@ function -- the government-function-classification counterpart to
 (cofog/readiness "06.3" #{:robotics :telemetry :dmn :bpmn :audit-ledger})
 ```
 
+## Portable, and how the registry gets compiled in
+
+`kotoba.cofog` is `.cljc` and touches **no file at runtime**. The registry
+lives in `resources/kotoba/cofog/registry.edn` — that is still the source of
+truth and the only thing to edit — and `tools/gen-embedded.cljs` projects it
+into the generated `src/kotoba/cofog/embedded.cljc`, which is what the
+library reads.
+
+```sh
+nbb tools/gen-embedded.cljs           # after editing the EDN
+nbb tools/gen-embedded.cljs --check   # exit 1 if the projection is stale
+
+clojure -M:test                                   # JVM
+nbb --classpath src:test:<technology/src> test/run_portable.cljs   # ClojureScript
+nbb tools/mutate.cljs                             # prove the suite can fail
+```
+
+`io/resource` has no portable equivalent, and reading `resources/<path>`
+relative to the working directory is right only while this library is the
+root project — measured wrong on 2026-08-18, when `kotoba-lang/technology`
+briefly worked that way and returned nil for all 159 of `kotoba.iso3166`'s
+assertions under nbb. This registry exists to be depended on, so it is
+compiled in instead.
+
 ## Layers
 
 - business: customer-facing open COFOG blueprint
