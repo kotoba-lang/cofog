@@ -1,10 +1,46 @@
 (ns kotoba.cofog
+  "The COFOG (UN Classification of the Functions of Government) registry,
+  portable.
+
+  ## Why this is `.cljc` and not `.clj`
+
+  One line made this namespace JVM-only — `(slurp (io/resource …))` — and
+  with it every consumer, including the `cloud-itonami-cofog-*` actors this
+  registry exists to feed. `kotoba.technology`, which this requires, had the
+  same line and was made portable the same day. This workspace's runtime
+  order is kotoba-wasm → clojurewasm → ClojureScript → nbb, with the JVM
+  last; a registry of facts is the last thing that should decide a
+  consumer's runtime.
+
+  ## No runtime file access at all
+
+  There is no portable `io/resource`, and the obvious `:cljs` substitute —
+  reading `resources/<path>` relative to the working directory — is right
+  only while this library is the root project. That was measured wrong the
+  same day in `kotoba-lang/technology`: its registry came back nil for all
+  159 of `kotoba.iso3166`'s assertions under nbb, because nbb's cwd was
+  iso3166's root and not technology's. A portability fix that works only
+  while you are the root is not one, and this library has consumers ahead
+  of it.
+
+  So the registry is compiled in, as the generated
+  `kotoba.cofog.embedded`, projected from
+  `resources/kotoba/cofog/registry.edn` by `tools/gen-embedded.cljs`. The
+  EDN stays the thing a human edits; `--check` refuses to let them drift.
+
+  **A registry handed in as nil still propagates as nil.** `(into {} …)`
+  over nil yields `{}`, so `by-code` would answer a complete-looking index
+  over no data and `get-cofog` nil for every code — a caller passing
+  nothing must not receive that."
   (:require [clojure.edn :as edn]
-            [clojure.java.io :as io]
             [clojure.set :as set]
+            [kotoba.cofog.embedded :as embedded]
             [kotoba.technology :as technology]))
 
-(def registry-resource "kotoba/cofog/registry.edn")
+(def registry-resource
+  "The path a human edits. Nothing reads it at runtime — see the namespace
+  docstring — it is named here so the projection can be traced back to it."
+  "kotoba/cofog/registry.edn")
 
 ;; registry.edn is stored as Datomic/Datascript tx-data (a single-entity
 ;; vector, see scripts/edn-datomize.bb `wrap-generic`) rather than a raw map,
@@ -19,7 +55,7 @@
 (defn- unblob [v]
   (if (string? v)
     (try (let [parsed (edn/read-string v)] (if (coll? parsed) parsed v))
-         (catch Exception _ v))
+         (catch #?(:clj Exception :cljs :default) _ v))
     v))
 
 (defn- reconstitute-entity [tx-data]
@@ -29,16 +65,35 @@
                  [(if bare? (keyword (name k)) k) (unblob v)])))
         (dissoc (first tx-data) :db/id)))
 
-(defn registry []
-  (reconstitute-entity (edn/read-string (slurp (io/resource registry-resource)))))
+(defn registry
+  "The COFOG registry.
+
+  Reads `kotoba.cofog.embedded`, a GENERATED projection of
+  `resources/kotoba/cofog/registry.edn`, and touches no file at runtime.
+  See the namespace docstring for why a cwd-relative read was not
+  portability."
+  []
+  (reconstitute-entity embedded/registry-tx))
 
 (defn functions
-  ([] (:cofog (registry)))
+  "The COFOG entries, or **nil** when handed a registry that has none.
+
+  The zero-arg form goes through the one-arg form rather than duplicating
+  its body, so a guard added to one cannot be skipped by the other."
+  ([] (functions (registry)))
   ([reg] (:cofog reg)))
 
 (defn by-code
+  "COFOG entries indexed by `:code`, or **nil** when there are no entries.
+
+  `(into {} …)` over nil yields `{}`, which is why this needs saying: a
+  caller handing in nil would otherwise receive a complete-looking index
+  over no data, `get-cofog` would answer nil for every code in the
+  classification, and nothing would distinguish that from a code that
+  genuinely is not in COFOG."
   ([] (by-code (registry)))
-  ([reg] (into {} (map (juxt :code identity) (functions reg)))))
+  ([reg] (when-let [fs (functions reg)]
+           (into {} (map (juxt :code identity)) fs))))
 
 (defn get-cofog
   ([code] (get-cofog (registry) code))
