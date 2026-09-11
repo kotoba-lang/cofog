@@ -28,12 +28,12 @@ into the generated `src/kotoba/cofog/embedded.cljk`, which is what the
 library reads.
 
 ```sh
-nbb tools/gen-embedded.cljk           # after editing the EDN
-nbb tools/gen-embedded.cljk --check   # exit 1 if the projection is stale
+kbb --backend sci tools/gen-embedded.cljk           # after editing the EDN
+kbb --backend sci tools/gen-embedded.cljk --check   # exit 1 if the projection is stale
 
-clojure -M:test                                   # JVM
-nbb --classpath src:test:<technology/src> test/run_portable.cljk   # ClojureScript
-nbb tools/mutate.cljk                             # prove the suite can fail
+kbb -M:test                                   # JVM
+kbb --backend sci --classpath src:test:<technology/src> test/run_portable.cljk   # ClojureScript
+kbb --backend sci tools/mutate.cljk                             # prove the suite can fail
 ```
 
 `io/resource` has no portable equivalent, and reading `resources/<path>`
@@ -89,5 +89,5 @@ re-derived.
 ## Test
 
 ```bash
-clojure -M:test
+kbb -M:test
 ```
