@@ -1,5 +1,5 @@
 ;; One mutation per invariant. `:find` must occur EXACTLY ONCE in `:file` —
-;; `tools/mutate.cljs` refuses otherwise, because a mutation that landed in a
+;; `tools/mutate.cljk` refuses otherwise, because a mutation that landed in a
 ;; comment or a second call site produces a red suite that proves nothing.
 ;;
 ;; ## SCOPE
@@ -15,7 +15,7 @@
 ;; library is measured".
 ;;
 ;; ⚠ These mutations drive `clojure -M:test`. The `:cljs` half is exercised
-;; by `test/run_portable.cljs`, which this harness does not run — a mutation
+;; by `test/run_portable.cljk`, which this harness does not run — a mutation
 ;; that broke only a `:cljs` branch would survive here. Both were run by
 ;; hand; see the conversion commit message for the counts.
 ;;
@@ -40,42 +40,42 @@
 ;; `kotoba-lang/technology` and `kotoba-lang/iso3166`.
 [{:id :the-projection-cannot-drift-unnoticed
   :invariant "the generated namespace matches the EDN a human edits"
-  :file "src/kotoba/cofog/embedded.cljc"
+  :file "src/kotoba/cofog/embedded.cljk"
   :find "Waste management"
   :replace "Waste management DRIFTED"}
 
  {:id :the-drift-check-refuses-when-it-cannot-read
   :invariant "a check that could not run must not report a pass"
-  :file "test/kotoba/cofog_test.cljc"
+  :file "test/kotoba/cofog_test.cljk"
   :find "#?(:clj (try (slurp path) (catch Exception _ nil))"
   :replace "#?(:clj (try (slurp (str path \".missing\")) (catch Exception _ nil))"}
 
  {:id :by-code-does-not-invent-an-empty-index
   :invariant "(into {} …) over nil yields {} — an index over no data"
-  :file "src/kotoba/cofog.cljc"
+  :file "src/kotoba/cofog.cljk"
   :find "  ([reg] (when-let [fs (functions reg)]\n           (into {} (map (juxt :code identity)) fs))))"
   :replace "  ([reg] (into {} (map (juxt :code identity)) (functions reg))))"}
 
  {:id :by-code-is-keyed-on-the-cofog-code
   :invariant "the index key is :code and not some other field"
-  :file "src/kotoba/cofog.cljc"
+  :file "src/kotoba/cofog.cljk"
   :find "(map (juxt :code identity)) fs)"
   :replace "(map (juxt :name identity)) fs)"}
 
  {:id :the-registry-is-the-embedded-one
   :invariant "the library reads the projection and not something else"
-  :file "src/kotoba/cofog.cljc"
+  :file "src/kotoba/cofog.cljk"
   :find "  (reconstitute-entity embedded/registry-tx))"
   :replace "  (reconstitute-entity []))"}
 
  {:id :the-blob-is-actually-unblobbed
   :invariant "the pr-str'd :cofog blob is parsed back into a vector of maps"
-  :file "src/kotoba/cofog.cljc"
+  :file "src/kotoba/cofog.cljk"
   :find "(if (coll? parsed) parsed v))"
   :replace "v)"}
 
  {:id :reconstitute-drops-the-datomic-tempid
   :invariant ":db/id is a transaction artefact, not a registry field"
-  :file "src/kotoba/cofog.cljc"
+  :file "src/kotoba/cofog.cljk"
   :find "        (dissoc (first tx-data) :db/id)))"
   :replace "        (first tx-data)))"}]

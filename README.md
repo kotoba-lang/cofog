@@ -23,17 +23,17 @@ function -- the government-function-classification counterpart to
 
 `kotoba.cofog` is `.cljc` and touches **no file at runtime**. The registry
 lives in `resources/kotoba/cofog/registry.edn` — that is still the source of
-truth and the only thing to edit — and `tools/gen-embedded.cljs` projects it
-into the generated `src/kotoba/cofog/embedded.cljc`, which is what the
+truth and the only thing to edit — and `tools/gen-embedded.cljk` projects it
+into the generated `src/kotoba/cofog/embedded.cljk`, which is what the
 library reads.
 
 ```sh
-nbb tools/gen-embedded.cljs           # after editing the EDN
-nbb tools/gen-embedded.cljs --check   # exit 1 if the projection is stale
+nbb tools/gen-embedded.cljk           # after editing the EDN
+nbb tools/gen-embedded.cljk --check   # exit 1 if the projection is stale
 
 clojure -M:test                                   # JVM
-nbb --classpath src:test:<technology/src> test/run_portable.cljs   # ClojureScript
-nbb tools/mutate.cljs                             # prove the suite can fail
+nbb --classpath src:test:<technology/src> test/run_portable.cljk   # ClojureScript
+nbb tools/mutate.cljk                             # prove the suite can fail
 ```
 
 `io/resource` has no portable equivalent, and reading `resources/<path>`
