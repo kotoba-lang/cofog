@@ -1,5 +1,5 @@
 (ns kotoba.cofog-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba.cofog :as cofog]
             [kotoba.cofog.embedded :as embedded]))
 
