@@ -33,7 +33,7 @@
   over no data and `get-cofog` nil for every code — a caller passing
   nothing must not receive that."
   (:require [kotoba.lang.edn :as edn]
-            [clojure.set :as set]
+            [kotoba.lang.coll :as set]
             [kotoba.cofog.embedded :as embedded]
             [kotoba.technology :as technology]))
 
